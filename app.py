@@ -188,7 +188,7 @@ def search():
     amazon_data = scrape_amazon(search_term)
     flipkart_data = scrape_flipkart(search_term)
     croma_data = scrape_croma(search_term)
-    myntra_data = scrape_myntra(search_term)
+    myntra_data = scrape_myntra(search_term) 
     return jsonify([amazon_data, flipkart_data, croma_data, myntra_data])
 
 if __name__ == '__main__':
