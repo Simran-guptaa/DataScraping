@@ -96,10 +96,9 @@ def scrape_flipkart(search_term):
     finally:
         driver.quit() 
 
-def scrape_flipkart(search_term):
+def scrape_croma(search_term):
     search_url = f"https://www.flipkart.com/search?q={search_term.replace(' ', '%20')}"
-    
-    # Headless Chrome setup
+ 
     options = Options()
     options.add_argument('--headless')  # Run in headless mode
     options.add_argument('--disable-gpu')  # Disable GPU usage
