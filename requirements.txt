@@ -3,4 +3,4 @@ requests
 gunicorn
 beautifulsoup4
 selenium
-selenium
+webdriver-manager
