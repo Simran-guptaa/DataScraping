@@ -47,138 +47,138 @@ def scrape_amazon(search_term):
     except Exception as e:
         return {'Website': 'Amazon', 'Error': str(e)}
 
-def scrape_flipkart(search_term):
-    search_url = f"https://www.flipkart.com/search?q={search_term.replace(' ', '%20')}"
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
+# def scrape_flipkart(search_term):
+#     search_url = f"https://www.flipkart.com/search?q={search_term.replace(' ', '%20')}"
+#     options = Options()
+#     options.add_argument('--headless')
+#     options.add_argument('--disable-gpu')
+#     options.add_argument('--no-sandbox')
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+#     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    try:
-        driver.get(search_url)
-        WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'div._1YokD2'))
-        )
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
+#     try:
+#         driver.get(search_url)
+#         WebDriverWait(driver, 30).until(
+#             EC.presence_of_element_located((By.CSS_SELECTOR, 'div._1YokD2'))
+#         )
+#         soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-        products = soup.find_all('div', class_='_1AtVbE')
-        if not products:
-            return {'Website': 'Flipkart', 'Error': 'No products found'}
+#         products = soup.find_all('div', class_='_1AtVbE')
+#         if not products:
+#             return {'Website': 'Flipkart', 'Error': 'No products found'}
 
-        product = products[0]  # Just picking the first product (you can change this logic)
+#         product = products[0]  # Just picking the first product (you can change this logic)
 
-        title = product.find('div', class_='_4rR01T').text.strip() if product.find('div', class_='_4rR01T') else "N/A"
-        price = product.find('div', class_='_30jeq3').text.strip() if product.find('div', class_='_30jeq3') else "N/A"
+#         title = product.find('div', class_='_4rR01T').text.strip() if product.find('div', class_='_4rR01T') else "N/A"
+#         price = product.find('div', class_='_30jeq3').text.strip() if product.find('div', class_='_30jeq3') else "N/A"
         
-        # Check for offer price or discount price
-        offer_price = product.find('div', class_='_3I9_wc')
-        offer_price = offer_price.text.strip() if offer_price else "N/A"
+#         # Check for offer price or discount price
+#         offer_price = product.find('div', class_='_3I9_wc')
+#         offer_price = offer_price.text.strip() if offer_price else "N/A"
 
-        rating = product.find('div', class_='_3LWZlK').text.strip() if product.find('div', class_='_3LWZlK') else "No rating"
-        review_count = product.find('span', class_='_2_R_DZ').text.strip() if product.find('span', class_='_2_R_DZ') else "No reviews"
-        product_link = "https://www.flipkart.com" + product.find('a', class_='_1fQZEK')['href'] if product.find('a', class_='_1fQZEK') else "N/A"
+#         rating = product.find('div', class_='_3LWZlK').text.strip() if product.find('div', class_='_3LWZlK') else "No rating"
+#         review_count = product.find('span', class_='_2_R_DZ').text.strip() if product.find('span', class_='_2_R_DZ') else "No reviews"
+#         product_link = "https://www.flipkart.com" + product.find('a', class_='_1fQZEK')['href'] if product.find('a', class_='_1fQZEK') else "N/A"
 
-        return {
-            'Website': 'Flipkart',
-            'Title': title,
-            'Price': price,
-            'Offer Price': offer_price,
-            'Rating': rating,
-            'Reviews Count': review_count,
-            'Product Link': product_link
-        }
+#         return {
+#             'Website': 'Flipkart',
+#             'Title': title,
+#             'Price': price,
+#             'Offer Price': offer_price,
+#             'Rating': rating,
+#             'Reviews Count': review_count,
+#             'Product Link': product_link
+#         }
 
-    except Exception as e:
-        return {'Website': 'Flipkart', 'Error': str(e)}
+#     except Exception as e:
+#         return {'Website': 'Flipkart', 'Error': str(e)}
 
-    finally:
-        driver.quit() 
+#     finally:
+#         driver.quit() 
 
-def scrape_croma(search_term):
-    search_url = f"https://www.flipkart.com/search?q={search_term.replace(' ', '%20')}"
+# def scrape_croma(search_term):
+#     search_url = f"https://www.flipkart.com/search?q={search_term.replace(' ', '%20')}"
  
-    options = Options()
-    options.add_argument('--headless')  # Run in headless mode
-    options.add_argument('--disable-gpu')  # Disable GPU usage
-    options.add_argument('--no-sandbox')  # Required in Render environment
-    options.add_argument('--disable-dev-shm-usage')  # Prevent shared memory issues
+#     options = Options()
+#     options.add_argument('--headless')  # Run in headless mode
+#     options.add_argument('--disable-gpu')  # Disable GPU usage
+#     options.add_argument('--no-sandbox')  # Required in Render environment
+#     options.add_argument('--disable-dev-shm-usage')  # Prevent shared memory issues
 
-    try:
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        driver.get(search_url)
+#     try:
+#         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+#         driver.get(search_url)
 
-        WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'div._1YokD2'))
-        )
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        products = soup.find_all('div', class_='_1AtVbE')
+#         WebDriverWait(driver, 30).until(
+#             EC.presence_of_element_located((By.CSS_SELECTOR, 'div._1YokD2'))
+#         )
+#         soup = BeautifulSoup(driver.page_source, 'html.parser')
+#         products = soup.find_all('div', class_='_1AtVbE')
 
-        if not products:
-            return {'Website': 'Flipkart', 'Error': 'No products found'}
+#         if not products:
+#             return {'Website': 'Flipkart', 'Error': 'No products found'}
 
-        # Extract the first product
-        product = products[0]
-        title = product.find('div', class_='_4rR01T').text.strip() if product.find('div', class_='_4rR01T') else "N/A"
-        price = product.find('div', class_='_30jeq3').text.strip() if product.find('div', class_='_30jeq3') else "N/A"
-        offer_price = product.find('div', class_='_3I9_wc')
-        offer_price = offer_price.text.strip() if offer_price else "N/A"
+#         # Extract the first product
+#         product = products[0]
+#         title = product.find('div', class_='_4rR01T').text.strip() if product.find('div', class_='_4rR01T') else "N/A"
+#         price = product.find('div', class_='_30jeq3').text.strip() if product.find('div', class_='_30jeq3') else "N/A"
+#         offer_price = product.find('div', class_='_3I9_wc')
+#         offer_price = offer_price.text.strip() if offer_price else "N/A"
 
-        return {
-            'Website': 'Flipkart',
-            'Title': title,
-            'Price': price,
-            'Offer Price': offer_price,
-        }
-    except Exception as e:
-        return {'Website': 'Flipkart', 'Error': str(e)}
-    finally:
-        if 'driver' in locals():
-            driver.quit()
+#         return {
+#             'Website': 'Flipkart',
+#             'Title': title,
+#             'Price': price,
+#             'Offer Price': offer_price,
+#         }
+#     except Exception as e:
+#         return {'Website': 'Flipkart', 'Error': str(e)}
+#     finally:
+#         if 'driver' in locals():
+#             driver.quit()
 
 
-# Function to scrape data from Myntra 
-def scrape_myntra(search_term):
-    url = f"https://www.myntra.com/s?k={search_term.replace(' ', '+')}"
-    options = Options()
-    options.headless = True  
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+# # Function to scrape data from Myntra 
+# def scrape_myntra(search_term):
+#     url = f"https://www.myntra.com/s?k={search_term.replace(' ', '+')}"
+#     options = Options()
+#     options.headless = True  
+#     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    driver.get(url)
-    try:
-        WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'pdp-title'))
-        )
-        title = driver.find_element(By.CLASS_NAME, 'pdp-title').text.strip()
+#     driver.get(url)
+#     try:
+#         WebDriverWait(driver, 30).until(
+#             EC.presence_of_element_located((By.CLASS_NAME, 'pdp-title'))
+#         )
+#         title = driver.find_element(By.CLASS_NAME, 'pdp-title').text.strip()
 
-        try:
-            price = driver.find_element(By.CLASS_NAME, 'PriceInfo-mrp').text.strip()
-        except:
-            price = "Price not found"
+#         try:
+#             price = driver.find_element(By.CLASS_NAME, 'PriceInfo-mrp').text.strip()
+#         except:
+#             price = "Price not found"
 
-        try:
-            offer_price = driver.find_element(By.CLASS_NAME, 'pdp-price').text.strip()
-        except:
-            offer_price = "Offer Price not found"
+#         try:
+#             offer_price = driver.find_element(By.CLASS_NAME, 'pdp-price').text.strip()
+#         except:
+#             offer_price = "Offer Price not found"
 
-        try:
-            rating = driver.find_element(By.CLASS_NAME, 'index-overallRating').text.strip()
-        except:
-            rating = "Rating not found"
+#         try:
+#             rating = driver.find_element(By.CLASS_NAME, 'index-overallRating').text.strip()
+#         except:
+#             rating = "Rating not found"
 
-        try:
-            review = driver.find_element(By.CLASS_NAME, 'detailed-reviews-headline').text.strip()
-        except:
-            review = "Review not found"
+#         try:
+#             review = driver.find_element(By.CLASS_NAME, 'detailed-reviews-headline').text.strip()
+#         except:
+#             review = "Review not found"
 
-        return {'Website': 'Myntra', 'Title': title, 'Price': price, 'Offer Price': offer_price, 'Rating': rating, 'Review': review, 'Product Link': url}
+#         return {'Website': 'Myntra', 'Title': title, 'Price': price, 'Offer Price': offer_price, 'Rating': rating, 'Review': review, 'Product Link': url}
 
-    except Exception as e:
-        print(f"Error scraping {url}: {e}")
-        return {'Website': 'Myntra', 'Title': 'N/A','Price': 'N/A','Offer Price': 'N/A','Rating': 'N/A','Review': 'N/A','Product Link': url}
-    finally:
-        driver.quit()
+#     except Exception as e:
+#         print(f"Error scraping {url}: {e}")
+#         return {'Website': 'Myntra', 'Title': 'N/A','Price': 'N/A','Offer Price': 'N/A','Rating': 'N/A','Review': 'N/A','Product Link': url}
+#     finally:
+#         driver.quit()
 
 @app.route('/')
 def home():
@@ -188,10 +188,10 @@ def home():
 def search():
     search_term = request.form.get('search_term')
     amazon_data = scrape_amazon(search_term)
-    flipkart_data = scrape_flipkart(search_term)
-    croma_data = scrape_croma(search_term)
-    myntra_data = scrape_myntra(search_term) 
-    return jsonify([amazon_data, flipkart_data, croma_data, myntra_data])
+    # flipkart_data = scrape_flipkart(search_term)
+    # croma_data = scrape_croma(search_term)
+    # myntra_data = scrape_myntra(search_term) 
+    return jsonify([amazon_data])
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
