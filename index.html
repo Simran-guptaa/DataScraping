@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Search</title>
+    <title>Amazon Scraper</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -12,7 +12,7 @@
             margin-top: 50px;
         }
         .container {
-            max-width: 900px;
+            max-width: 800px;
         }
         .table th, .table td {
             vertical-align: middle;
@@ -24,8 +24,8 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center">Product Search</h1>
-        
+        <h1 class="text-center">Amazon Scraper</h1>
+
         <!-- Search Form -->
         <form id="searchForm">
             <div class="mb-3">
@@ -35,7 +35,7 @@
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
 
-        <!-- Results Table -->
+        <!-- Results Section -->
         <div id="results"></div>
     </div>
 
@@ -44,31 +44,30 @@
         $(document).ready(function () {
             $('#searchForm').on('submit', function (e) {
                 e.preventDefault(); // Prevent page reload
-
                 const searchTerm = $('#searchInput').val();
+
                 if (!searchTerm) {
                     alert("Please enter a product name.");
                     return;
                 }
 
+                $('#results').html('<p>Loading...</p>'); // Show loading message
                 $.ajax({
-                    url: '/search', // This should match the Flask route
+                    url: '/search',
                     method: 'POST',
-                    contentType: 'application/x-www-form-urlencoded',
                     data: { search_term: searchTerm },
                     success: function (data) {
                         let html = '<h2>Search Results</h2><div class="table-responsive"><table class="table table-bordered">';
-                        html += '<thead><tr><th>Website</th><th>Title</th><th>Price</th><th>Offer Price</th><th>Rating</th><th>Reviews</th><th>Link</th></tr></thead><tbody>';
+                        html += '<thead><tr><th>Website</th><th>Title</th><th>Price</th><th>Rating</th><th>Reviews</th><th>Link</th></tr></thead><tbody>';
 
                         data.forEach(item => {
                             if (item.Error) {
-                                html += `<tr><td>${item.Website}</td><td colspan="6">${item.Error}</td></tr>`;
+                                html += `<tr><td>${item.Website}</td><td colspan="5">${item.Error}</td></tr>`;
                             } else {
                                 html += `<tr>
                                     <td>${item.Website}</td>
                                     <td>${item.Title}</td>
                                     <td>${item.Price}</td>
-                                    <td>${item['Offer Price']}</td>
                                     <td>${item.Rating}</td>
                                     <td>${item['Reviews Count'] || 'No reviews'}</td>
                                     <td><a href="${item['Product Link']}" target="_blank">View</a></td>
@@ -76,7 +75,7 @@
                             }
                         });
 
-                        html += '</tbody></table></div>'; 
+                        html += '</tbody></table></div>';
                         $('#results').html(html);
                     },
                     error: function () {
