@@ -13,7 +13,7 @@ from urllib.parse import quote_plus
 app = Flask(__name__)
 
 def scrape_amazon(search_term):
-    base_url = f"https://www.amazon.in/s?k={search_term.replace(' ', '+')}"
+    base_url = f"https://www.amazon.in/s?k={quote_plus(search_term)}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
     }
@@ -52,25 +52,15 @@ def scrape_amazon(search_term):
         return {'Website': 'Amazon', 'Error': f"Request failed: {str(e)}"}
     except Exception as e:
         return {'Website': 'Amazon', 'Error': str(e)}
-
-
-@app.route('/')
-def home():
-    return send_from_directory('.', 'index.html')
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory('.', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
+    
 @app.route('/search', methods=['POST'])
 def search():
     search_term = request.form.get('search_term')
+    if not search_term:
+        return jsonify({'error': 'Search term is required'}), 400
+
     try:
         amazon_data = scrape_amazon(search_term)
-        return jsonify([amazon_data])
+        return jsonify([amazon_data])  # Return as a list to match client expectations
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
-
- 
+        return jsonify({'error': str(e)}), 500
